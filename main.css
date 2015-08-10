@@ -7,10 +7,6 @@ hr {
 	margin: 15px 10px;
 }
 
-#result-container {
-	text-align: center;
-}
-
 hr.thin {
 	border: 0;
     height: 0;
@@ -81,6 +77,14 @@ input[type=number]::-webkit-outer-spin-button {
 
 .addtl-info h3 {
 	margin-top: 0px;
+	margin-bottom: 10px;
+}
+
+#result-container {
+	text-align: center;
+}
+
+#result-container input {
 	margin-bottom: 10px;
 }
 

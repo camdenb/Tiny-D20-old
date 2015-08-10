@@ -1,8 +1,8 @@
 {
 	"manifest_version" : 2,
 
-	"name": "D20",
-	"description": "A tiny dice set that lives in your browser",
+	"name": "Chrome d20",
+	"description": "A tiny dice set that lives in your toolbar!",
 	"version": "1.0",
 
 	"browser_action": {
@@ -11,7 +11,7 @@
 		"default_title": "Roll me!"
 	},
 	"permissions": [
-		"activeTab"
+		
 	]
 }
 
