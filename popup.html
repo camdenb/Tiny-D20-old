@@ -11,19 +11,19 @@
 	<div id="main-dice">
 		<div id="top-container">
 			<div id="sides-box">
-				<input type="radio" id="d4" name="sides" value="4" checked>
+				<input type="radio" id="d4" name="sides" value="4">
 				<label for="d4">d4</label>
 				<input type="radio" id="d6" name="sides" value="6">
 				<label for="d6">d6</label>
 				<input type="radio" id="d8" name="sides" value="8">
 				<label for="d8">d8</label>
-				<input type="radio" id="d10" name="sides" value="10" checked>
+				<input type="radio" id="d10" name="sides" value="10">
 				<label for="d10">d10</label>
 				<input type="radio" id="d12" name="sides" value="12">
 				<label for="d12">d12</label>
-				<input type="radio" id="d20" name="sides" value="20">
+				<input type="radio" id="d20" name="sides" value="20" checked>
 				<label for="d20">d20</label>
-				<input type="radio" id="d100" name="sides" value="100" checked>
+				<input type="radio" id="d100" name="sides" value="100">
 				<label for="d100">d100</label>
 			</div>
 			<hr class="thin">
@@ -46,7 +46,15 @@
 		</div>
 		<div id="advanced">
 			<hr class="thin">
-			<textarea id="results-array" rows="3"></textarea>
+			<textarea id="results-array" rows="2" cols="10"></textarea>
+			<div id="min-box" class="minmax">
+				<h3 class="prompt">Min</h3>
+				<input type="number" id="min" class="control" value="0">
+			</div>
+			<div id="max-box" class="minmax">
+				<h3 class="prompt">Max</h3>
+				<input type="number" id="max" class="control" value="0">
+			</div>
 		</div>
 			
 	</div>

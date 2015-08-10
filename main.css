@@ -81,6 +81,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 .addtl-info h3 {
 	margin-top: 0px;
+	margin-bottom: 10px;
 }
 
 #advanced {
@@ -89,5 +90,21 @@ input[type=number]::-webkit-outer-spin-button {
 
 #advanced textarea {
 	width: 200px;
-	resize: none;
+	resize: vertical;
+	font-family: "Monaco", "Courier New", Courier, monospace;
+}
+
+.minmax {
+	display: inline-block;
+	width: 40%;
+}
+
+.minmax input {
+	width: 40px;
+	text-align: center;
+}
+
+.minmax h3 {
+	margin-top: 5px;
+	margin-bottom: 3px;
 }

@@ -24,16 +24,45 @@ function rollDice() {
 
 	var total = 0;
 
+	var rollArray = []
+
 	for(var i = 0; i < rolls; i++) {
 		var newNum = getRandomInt(1, sides);
 		total += newNum
+		rollArray.push(newNum)
 	}
 
 	total += modifier;
 
 	document.getElementById("result").textContent = total;
+
+	updateAdvancedArea(rollArray);
 }
 
+function updateAdvancedArea(rollArray) {
+	refreshAdvancedTextArea(rollArray);
+	var min = rollArray[0];
+	var max = rollArray[0];
+	for(var i = 0; i < rollArray.length; i++) {
+		var num = rollArray[i];
+		if(Math.max(num, max) == num) {
+			max = num;
+		}
+		if(Math.min(num, min) == num) {
+			min = num;
+		}
+	}
+	setMinAndMax(min, max);
+}
+
+function setMinAndMax(min, max) {
+	document.getElementById("min").value = min;
+	document.getElementById("max").value = max;
+}
+
+function refreshAdvancedTextArea(arr) {
+	document.getElementById("results-array").textContent = arr.join([separator = ', ']);
+}
 
 //https://gist.github.com/kerimdzhanov/7529623
 function getRandomInt(min, max) {
@@ -52,7 +81,6 @@ function toggleAdvanced() {
 function showAdvanced() {
 	document.getElementById("advanced").style.display = "";
 	advancedIsShown = true
-	// document.getElementById("results-array").textContent = [12, 2, 12, 29].join([separator = ', ']);
 }
 
 function hideAdvanced() {
