@@ -1,0 +1,17 @@
+{
+	"manifest_version" : 2,
+
+	"name": "D20",
+	"description": "A tiny dice set that lives in your browser",
+	"version": "1.0",
+
+	"browser_action": {
+		"default_icon": "icon48.png",
+		"default_popup": "popup.html",
+		"default_title": "Roll me!"
+	},
+	"permissions": [
+		"activeTab"
+	]
+}
+
