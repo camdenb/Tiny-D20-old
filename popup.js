@@ -61,7 +61,7 @@ function setMinAndMax(min, max) {
 }
 
 function refreshAdvancedTextArea(arr) {
-	document.getElementById("results-array").textContent = arr.join([separator = ', ']);
+	document.getElementById("results-array").textContent = "[" + arr.join([separator = ', ']) + "]";
 }
 
 //https://gist.github.com/kerimdzhanov/7529623
