@@ -1,9 +1,14 @@
 {
 	"manifest_version" : 2,
 
-	"name": "Chrome d20",
+	"name": "Tiny D20",
+	"short_name": "Tiny D20",
 	"description": "A tiny dice set that lives in your toolbar!",
 	"version": "1.0",
+
+	"author": "camdenb",
+
+	"omnibox": { "keyword" : "roll"},
 
 	"icons": {
 		"48": "icon48.png",

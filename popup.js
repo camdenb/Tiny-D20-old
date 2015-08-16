@@ -20,7 +20,15 @@ function rollDice() {
 	}
 
 	var rolls = document.getElementById('times').value;
-	var modifier = parseInt(document.getElementById('modifier').value);
+	var modString = document.getElementById('modifier').value;
+
+	if (!modString.charAt(0).match(/^[0-9]$/)) {
+		if(modString.charAt(0) != "-") {
+			modString = modString.substring(1, modString.length);
+		}
+	}
+
+	var modifier = parseInt(modString);
 
 	var total = 0;
 
