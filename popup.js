@@ -2,14 +2,48 @@ window.onload = init;
 var advancedIsShown = false;
 var advancedStartsOpen = false;
 var timesUsed = 0;
+var macrosList;
+
+var macrosListDiv;
 
 function init() {
 	document.getElementById("roll").onclick = rollDice;
+	macrosListDiv = document.getElementById('macros_list');
 	hideAdvanced()
 	document.getElementById("adv-button").onclick = toggleAdvanced;
-	document.getElementById("adv-button").disabled = true;
+	document.getElementById("adv-button").hidden = true;
 	document.getElementById("options").onclick = openOptions;
+	var sides_dom = document.getElementsByName("sides");
+	for(var i = 0; i < sides_dom.length; i++){
+	    sides_dom[i].addEventListener('click', rollChanged);
+	}
+	
+	document.getElementById("times").addEventListener('input', rollChanged);
+	document.getElementById("modifier").addEventListener('input', rollChanged);
 	updatePrefs();
+	rollChanged();
+}
+
+function loadMacrosList() {
+	var newHTML = ""
+	for(var i = 0; i < macrosList.length; i++) {
+		newHTML += "<input type=button class='macroButton' value='" + macrosList[i].name + " (" + macrosList[i].value + ")' id='macro" + i + "'>";
+	}
+	macrosListDiv.innerHTML = newHTML;
+	initMacroBindings();
+}
+
+
+function initMacroBindings() {
+	for(var i = 0; i < macrosList.length; i++) {
+		var macroButton = document.getElementById('macro' + i);
+		macroButton.onclick = (function(i) {
+	      return function() {
+	        var detailsArray = macrosList[i].detailsArray;
+			rollDiceWithValues(detailsArray[1], detailsArray[2], detailsArray[3])
+	      };
+	    })(i);
+	}
 }
 
 function generateTable(arr, nat_max) {
@@ -42,6 +76,29 @@ function generateTable(arr, nat_max) {
 	
 }
 
+function rollChanged() {
+	var arr = getRollsSidesMod();
+	var str = arr["rolls"] + "d" + arr["sides"];
+	if(arr["mod"] != 0) {
+		if(arr["mod"] > 0) {
+			str += "+";
+		}
+		str += parseInt(arr["mod"]);
+	}
+
+	var newValue = "Roll " + str + "!";
+
+	if(isNaN(document.getElementById("times").value)
+		|| isNaN(document.getElementById("modifier").value)) {
+		document.getElementById('roll').disabled = true;
+		newValue = "Invalid Roll"
+	} else {
+		document.getElementById('roll').disabled = false;
+	}
+
+	document.getElementById('roll').value = newValue;
+}
+
 function getRollsSidesMod() {
 	var sides_dom = document.getElementsByName('sides');
 	var sides;
@@ -55,7 +112,39 @@ function getRollsSidesMod() {
 	var modString = document.getElementById('modifier').value;
 
 	return {"sides":sides, "rolls":rolls, "mod":modString};
+}
 
+function rollDiceWithValues(rolls, sides, mod) {
+
+	var total = 0
+	var rollArray = []
+
+	var modNum = parseInt(mod);
+
+	console.log(sides + " " + rolls + " " + modNum);
+
+	for(var i = 0; i < rolls; i++) {
+		var newNum = getRandomInt(1, sides);
+		total += newNum
+		rollArray.push(newNum)
+	}
+
+	if(mod) {
+		total += modNum;
+	}
+
+	document.getElementById("result").textContent = total;
+	document.getElementById("adv-button").hidden = false;
+
+	if(advancedStartsOpen) {
+		showAdvanced();
+	}
+
+	updateTimesUsed();
+
+	updateAdvancedArea(rollArray, sides);
+
+	return [total, rollArray];
 }
 
 function rollDice() {
@@ -68,36 +157,9 @@ function rollDice() {
 	var rolls = dataArr["rolls"]
 	var modString = dataArr["mod"]
 
-	if (!modString.charAt(0).match(/^[0-9]$/)) {
-		if(modString.charAt(0) != "-") {
-			modString = modString.substring(1, modString.length);
-		}
-	}
-
 	var modifier = parseInt(modString);
 
-	var total = 0;
-
-	var rollArray = []
-
-	for(var i = 0; i < rolls; i++) {
-		var newNum = getRandomInt(1, sides);
-		total += newNum
-		rollArray.push(newNum)
-	}
-
-	total += modifier;
-
-	document.getElementById("result").textContent = total;
-	document.getElementById("adv-button").disabled = false;
-
-	if(advancedStartsOpen) {
-		showAdvanced();
-	}
-
-	updateTimesUsed();
-
-	updateAdvancedArea(rollArray, sides);
+	var results = rollDiceWithValues(rolls, sides, modifier)
 }
 
 function updateTimesUsed() {
@@ -116,6 +178,8 @@ function updatePrefs() {
 	chrome.storage.sync.get(null, function(obj) {
 		advancedStartsOpen = obj.advancedStartsOpen;
 		timesUsed = obj.timesUsed;
+		macrosList = obj.macroArr;
+		loadMacrosList();
 	});
 }
 

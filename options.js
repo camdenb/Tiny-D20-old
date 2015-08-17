@@ -57,6 +57,7 @@ function save_options() {
 function Macro(name, value) {
 	this.name = name;
 	this.value = value;
+	this.detailsArray = getInfoFromRegex(value);
 }
 
 function saveTableToArray() {

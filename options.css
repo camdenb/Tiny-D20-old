@@ -43,7 +43,9 @@ td, th {
 }
 
 tr {
-  height: 50px;
+	height: 50px;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 td input[type=text] {

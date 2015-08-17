@@ -10,8 +10,8 @@ hr {
 hr.thin {
 	border: 0;
     height: 0;
-    border-top: 1px solid rgba(0, 0, 0, 0.3);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /*
@@ -55,6 +55,8 @@ input[type=radio]:checked + label {
     color: #fff;
 }
 
+
+
 input[type=number]::-webkit-inner-spin-button, 
 input[type=number]::-webkit-outer-spin-button { 
   -webkit-appearance: none; 
@@ -84,8 +86,19 @@ input[type=number]::-webkit-outer-spin-button {
 	text-align: center;
 }
 
+.macroButton {
+	/*white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;*/
+	word-wrap: normal;
+	white-space: normal;
+}
+
+
 #result-container input {
-	margin-bottom: 10px;
+	margin: 5px 0;
+	width: 200px;
+	text-align: center;
 }
 
 #advanced {
@@ -98,12 +111,6 @@ input[type=number]::-webkit-outer-spin-button {
 
 .nat-min {
 	background-color: #DEA7A9;
-}
-
-#advanced textarea {
-	width: 200px;
-	resize: vertical;
-	font-family: "Monaco", "Courier New", Courier, monospace;
 }
 
 #results-table, #minmax-table {
