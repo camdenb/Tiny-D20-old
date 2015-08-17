@@ -60,7 +60,7 @@ function generateTable(arr, nat_max) {
 
 		//count column
 		var countCell = newRow.insertCell(0);
-		countCell.innerHTML = i + 1;
+		countCell.innerHTML = "#" + (i + 1);
 
 		//roll column
 		var rollCell = newRow.insertCell(-1);
