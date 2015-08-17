@@ -4,24 +4,28 @@
 	"name": "Tiny D20",
 	"short_name": "Tiny D20",
 	"description": "A tiny dice set that lives in your toolbar!",
-	"version": "1.0",
+	"version": "1.1",
 
 	"author": "camdenb",
 
-	"omnibox": { "keyword" : "roll"},
+	"options_ui": {
+		"page": "options.html",
+		"chrome_style": true
+	},
+
+	"options_page": "options.html",
 
 	"icons": {
-		"48": "icon48.png",
 		"128": "icon128.png"
 	},
 
 	"browser_action": {
-		"default_icon": "icon48.png",
+		"default_icon": "icon38-white-outline.png",
 		"default_popup": "popup.html",
 		"default_title": "Roll me!"
 	},
 	"permissions": [
-		
+		"storage"
 	]
 }
 

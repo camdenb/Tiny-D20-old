@@ -1,12 +1,45 @@
 window.onload = init;
 var advancedIsShown = false;
+var advancedStartsOpen = false;
+var timesUsed = 0;
 
 function init() {
 	document.getElementById("roll").onclick = rollDice;
 	hideAdvanced()
 	document.getElementById("adv-button").onclick = toggleAdvanced;
+	document.getElementById("adv-button").disabled = true;
+	updatePrefs();
 }
 
+function generateTable(arr, nat_max) {
+	var table = document.getElementById("results-table");
+	
+	//clear table first
+	table.innerHTML = "";
+	
+	//populate table from array - VERTICAL
+	for (var i = arr.length - 1; i >= 0; i--) {
+
+		var num = arr[i];
+		var newRow = table.insertRow(0);
+
+		//count column
+		var countCell = newRow.insertCell(0);
+		countCell.innerHTML = i + 1;
+
+		//roll column
+		var rollCell = newRow.insertCell(-1);
+		rollCell.innerHTML = num;
+
+		if(num == nat_max) {
+			rollCell.className += " nat-max";
+		} else if(num == 1) {
+			rollCell.className += " nat-min";
+		}
+
+	};
+	
+}
 
 function rollDice() {
 	var result = 0
@@ -43,12 +76,38 @@ function rollDice() {
 	total += modifier;
 
 	document.getElementById("result").textContent = total;
+	document.getElementById("adv-button").disabled = false;
 
-	updateAdvancedArea(rollArray);
+	if(advancedStartsOpen) {
+		showAdvanced();
+	}
+
+	updateTimesUsed();
+
+	updateAdvancedArea(rollArray, sides);
 }
 
-function updateAdvancedArea(rollArray) {
-	refreshAdvancedTextArea(rollArray);
+function updateTimesUsed() {
+	var newValue = 0;
+	if(timesUsed !== undefined && timesUsed !== null) {
+		newValue = timesUsed + 1
+		timesUsed = newValue;
+	}
+	chrome.storage.sync.set({
+	    "timesUsed": newValue
+	});
+
+}
+
+function updatePrefs() {
+	chrome.storage.sync.get(null, function(obj) {
+		advancedStartsOpen = obj.advancedStartsOpen;
+		timesUsed = obj.timesUsed;
+	});
+}
+
+function updateAdvancedArea(rollArray, nat_max) {
+	generateTable(rollArray, nat_max);
 	var min = rollArray[0];
 	var max = rollArray[0];
 	for(var i = 0; i < rollArray.length; i++) {
@@ -63,13 +122,12 @@ function updateAdvancedArea(rollArray) {
 	setMinAndMax(min, max);
 }
 
-function setMinAndMax(min, max) {
-	document.getElementById("min").value = min;
-	document.getElementById("max").value = max;
-}
+function setMinAndMax(_min, _max) {
+	var min = document.getElementById("minmax-table-min");
+	var max = document.getElementById("minmax-table-max");
 
-function refreshAdvancedTextArea(arr) {
-	document.getElementById("results-array").textContent = "[" + arr.join([separator = ', ']) + "]";
+	min.innerHTML = _min;
+	max.innerHTML = _max;
 }
 
 //https://gist.github.com/kerimdzhanov/7529623
@@ -80,18 +138,18 @@ function getRandomInt(min, max) {
 function toggleAdvanced() {
 	console.log('toggling')
 	if(advancedIsShown) {
-		hideAdvanced()
+		hideAdvanced();
 	} else {
-		showAdvanced()
+		showAdvanced();
 	}
 }
 
 function showAdvanced() {
 	document.getElementById("advanced").style.display = "";
-	advancedIsShown = true
+	advancedIsShown = true;
 }
 
 function hideAdvanced() {
 	document.getElementById("advanced").style.display = "none";
-	advancedIsShown = false
+	advancedIsShown = false;
 }

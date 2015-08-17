@@ -48,15 +48,21 @@
 
 		<div id="advanced">
 			<hr class="thin">
-			<textarea id="results-array" rows="2" cols="10" placeholder="Each roll will appear here."></textarea>
-			<div id="min-box" class="minmax">
-				<h3 class="prompt">Min</h3>
-				<input type="number" id="min" class="control" value="0">
-			</div>
-			<div id="max-box" class="minmax">
-				<h3 class="prompt">Max</h3>
-				<input type="number" id="max" class="control" value="0">
-			</div>
+
+			<table id="minmax-table">
+				<tr>
+					<th>Min</th>
+					<th>Max</th>
+				</tr>
+				<tr>
+					<td id="minmax-table-min"></td>
+					<td id="minmax-table-max"></td>
+				</tr>
+			</table>
+
+			<table id="results-table">
+			</table>
+
 		</div>
 			
 	</div>
