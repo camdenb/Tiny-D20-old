@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<title>Tiny D20 Options</title>
 	<link rel="stylesheet" type="text/css" href="options.css" />
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 </head>
 <body>
 	
@@ -19,12 +20,36 @@
 	</p>
 	
 	<p class="option">
-		<label for="adv" class="title">Advanced Results Revealed at Start:</label>
+		<label for="adv" class="title">Always Show Advanced Results:</label>
 		<input type="checkbox" id="advStartsOpen" value="advStartsOpen">
 	</p>
 
-	<!-- <h5>Settings are saved automatically.</h5> -->
-	<h5><a href="https://chrome.google.com/webstore/detail/tiny-d20/kioakkagkemhjepoflhccjmabkhbiepp">Consider leaving a review if you like the app! :)<a></h5>
+	<p class="option">
+		<label for="macro_table" class="title">Macros</label>
+		
+		<div class="macros_container">
+			<table id='macro_table'>
+				<tr>
+					<th>Name</th>
+					<th>Value<br><span class='subtext'>(Must be in format XdY or XdY+Z or XdY-Z)</span></th>
+					<th>Options</th>
+				</tr>
+				<tr>
+					<td>
+						<input type="text" placeholder="Name (ex: Short Sword)" id="macro_name" />
+					</td>
+					<td>
+						<input type="text" placeholder="Value (ex: 2d20+1)" id="macro_value" />
+					</td>
+					<td>
+						<input type="button" value="Create Macro" class="btn_create" />
+					</td>
+				</tr>
+			</table>
+		</div>
+	</p>
+
+	<h5><a href="https://chrome.google.com/webstore/detail/tiny-d20/kioakkagkemhjepoflhccjmabkhbiepp/reviews">Consider leaving a review if you like my extension! :)<a></h5>
 
 	<script src="options.js"></script>
 </body>

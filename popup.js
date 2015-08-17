@@ -8,6 +8,7 @@ function init() {
 	hideAdvanced()
 	document.getElementById("adv-button").onclick = toggleAdvanced;
 	document.getElementById("adv-button").disabled = true;
+	document.getElementById("options").onclick = openOptions;
 	updatePrefs();
 }
 
@@ -41,9 +42,7 @@ function generateTable(arr, nat_max) {
 	
 }
 
-function rollDice() {
-	var result = 0
-
+function getRollsSidesMod() {
 	var sides_dom = document.getElementsByName('sides');
 	var sides;
 	for(var i = 0; i < sides_dom.length; i++){
@@ -54,6 +53,20 @@ function rollDice() {
 
 	var rolls = document.getElementById('times').value;
 	var modString = document.getElementById('modifier').value;
+
+	return {"sides":sides, "rolls":rolls, "mod":modString};
+
+}
+
+function rollDice() {
+	var result = 0
+
+	var dataArr = getRollsSidesMod()
+
+	var sides = dataArr["sides"]
+
+	var rolls = dataArr["rolls"]
+	var modString = dataArr["mod"]
 
 	if (!modString.charAt(0).match(/^[0-9]$/)) {
 		if(modString.charAt(0) != "-") {
@@ -106,6 +119,16 @@ function updatePrefs() {
 	});
 }
 
+function openOptions() {
+	if (chrome.runtime.openOptionsPage) {
+	    // New way to open options pages, if supported (Chrome 42+).
+	    chrome.runtime.openOptionsPage();
+	} else {
+	    // Reasonable fallback.
+		window.open(chrome.runtime.getURL('options.html'));
+	}
+}
+
 function updateAdvancedArea(rollArray, nat_max) {
 	generateTable(rollArray, nat_max);
 	var min = rollArray[0];
@@ -119,7 +142,13 @@ function updateAdvancedArea(rollArray, nat_max) {
 			min = num;
 		}
 	}
-	setMinAndMax(min, max);
+	if(rollArray.length == 1) {
+		document.getElementById('minmax-table').hidden = true;
+	} else {
+		document.getElementById('minmax-table').hidden = false;
+		setMinAndMax(min, max);
+	}
+	
 }
 
 function setMinAndMax(_min, _max) {
