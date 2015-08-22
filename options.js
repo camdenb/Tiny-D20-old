@@ -13,6 +13,7 @@ var valueField = document.getElementById('macro_value');
 function init() {
 	document.getElementById("color").addEventListener('change', save_options);
 	document.getElementById("advStartsOpen").addEventListener('change', save_options);
+	document.getElementById("rollAnimation").addEventListener('change', save_options);
 	nameField.addEventListener('input', createInfoModified);
 	valueField.addEventListener('input', createInfoModified);
 	createInfoModified();
@@ -32,6 +33,7 @@ function loadCurrentValues() {
 			loadTableFromArray(obj.macroArr);
 		}
 
+		document.getElementById("rollAnimation").checked = obj.rollAnimation;		
 		document.getElementById("advStartsOpen").checked = obj.advancedStartsOpen;
 	});
 }
@@ -42,10 +44,12 @@ function save_options() {
   var color = document.getElementById('color').value;
   var isAdvChecked = document.getElementById('advStartsOpen').checked;
   var macroArr = saveTableToArray();
+  var rollAnimation = document.getElementById('rollAnimation').checked;
   chrome.storage.sync.set({
     "themeColor": color,
     "advancedStartsOpen": isAdvChecked,
-    "macroArr": macroArr
+    "macroArr": macroArr,
+    "rollAnimation" : rollAnimation
   });
 
   chrome.browserAction.setIcon({

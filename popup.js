@@ -1,8 +1,14 @@
 window.onload = init;
 var advancedIsShown = false;
 var advancedStartsOpen = false;
-var timesUsed = 0;
+var rollAnimation = true;
 var macrosList;
+
+var maxTimesToRoll = 17;
+var timesToRoll = maxTimesToRoll;
+var maxRollTime = 10;
+var rollTime = maxRollTime;
+var currentlyRolling = false;
 
 var macrosListDiv;
 
@@ -25,12 +31,14 @@ function init() {
 }
 
 function loadMacrosList() {
-	var newHTML = ""
-	for(var i = 0; i < macrosList.length; i++) {
-		newHTML += "<input type=button class='macroButton' value='" + macrosList[i].name + " (" + macrosList[i].value + ")' id='macro" + i + "'>";
+	if(macrosList) {
+		var newHTML = ""
+		for(var i = 0; i < macrosList.length; i++) {
+			newHTML += "<input type=button class='macroButton' value='" + macrosList[i].name + " (" + macrosList[i].value + ")' id='macro" + i + "'>";
+		}
+		macrosListDiv.innerHTML = newHTML;
+		initMacroBindings();
 	}
-	macrosListDiv.innerHTML = newHTML;
-	initMacroBindings();
 }
 
 
@@ -40,7 +48,7 @@ function initMacroBindings() {
 		macroButton.onclick = (function(i) {
 	      return function() {
 	        var detailsArray = macrosList[i].detailsArray;
-			rollDiceWithValues(detailsArray[1], detailsArray[2], detailsArray[3])
+			rollDiceWithValues(detailsArray[1], detailsArray[2], detailsArray[3], true, true)
 	      };
 	    })(i);
 	}
@@ -114,14 +122,12 @@ function getRollsSidesMod() {
 	return {"sides":sides, "rolls":rolls, "mod":modString};
 }
 
-function rollDiceWithValues(rolls, sides, mod) {
+function rollDiceWithValues(rolls, sides, mod, updateResults, fromButton) {
 
 	var total = 0
 	var rollArray = []
 
 	var modNum = parseInt(mod);
-
-	console.log(sides + " " + rolls + " " + modNum);
 
 	for(var i = 0; i < rolls; i++) {
 		var newNum = getRandomInt(1, sides);
@@ -133,18 +139,55 @@ function rollDiceWithValues(rolls, sides, mod) {
 		total += modNum;
 	}
 
-	document.getElementById("result").textContent = total;
-	document.getElementById("adv-button").hidden = false;
-
-	if(advancedStartsOpen) {
-		showAdvanced();
+	if(rollAnimation) {
+		if(fromButton && currentlyRolling) {
+			console.log("TRUE");
+			resetRollAnimation();
+		} else {
+			if(timesToRoll > 0) {
+				doRollAnimation(rolls, sides, mod);
+			} else {
+				resetRollAnimation();
+			}
+		}
 	}
 
-	updateTimesUsed();
+	if(updateResults) {
+		document.getElementById("result").textContent = total;
+		document.getElementById("adv-button").hidden = false;
+		
+		if(advancedStartsOpen) {
+			showAdvanced();
+		}
 
-	updateAdvancedArea(rollArray, sides);
+		updateAdvancedArea(rollArray, sides);
+	}
+
+	
 
 	return [total, rollArray];
+}
+
+function doRollAnimation(rolls, sides, mod) {
+	currentlyRolling = true;
+	if(timesToRoll == maxTimesToRoll){
+		rollTime = maxRollTime;
+		document.getElementById("result").className += "temp_roll";
+	}
+	setTimeout(function() {
+		rollDiceWithValues(rolls, sides, mod, true, false);
+	}, rollTime);
+	rollTime += 10;
+	console.log(rollTime);
+	timesToRoll -= 1;
+}
+
+function resetRollAnimation() {
+	currentlyRolling = false;
+	document.getElementById("result").className = "";
+	clearTimeout()
+	timesToRoll = maxTimesToRoll;
+	rollTime = maxRollTime;
 }
 
 function rollDice() {
@@ -159,26 +202,14 @@ function rollDice() {
 
 	var modifier = parseInt(modString);
 
-	var results = rollDiceWithValues(rolls, sides, modifier)
-}
-
-function updateTimesUsed() {
-	var newValue = 0;
-	if(timesUsed !== undefined && timesUsed !== null) {
-		newValue = timesUsed + 1
-		timesUsed = newValue;
-	}
-	chrome.storage.sync.set({
-	    "timesUsed": newValue
-	});
-
+	var results = rollDiceWithValues(rolls, sides, modifier, true, true)
 }
 
 function updatePrefs() {
 	chrome.storage.sync.get(null, function(obj) {
 		advancedStartsOpen = obj.advancedStartsOpen;
-		timesUsed = obj.timesUsed;
 		macrosList = obj.macroArr;
+		rollAnimation = obj.rollAnimation
 		loadMacrosList();
 	});
 }
@@ -229,7 +260,6 @@ function getRandomInt(min, max) {
 }
 
 function toggleAdvanced() {
-	console.log('toggling')
 	if(advancedIsShown) {
 		hideAdvanced();
 	} else {
