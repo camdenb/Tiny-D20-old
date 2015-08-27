@@ -4,9 +4,9 @@ var advancedStartsOpen = false;
 var rollAnimation = true;
 var macrosList;
 
-var maxTimesToRoll = 17;
+var maxTimesToRoll = 12;
 var timesToRoll = maxTimesToRoll;
-var maxRollTime = 10;
+var maxRollTime = 15;
 var rollTime = maxRollTime;
 var currentlyRolling = false;
 
